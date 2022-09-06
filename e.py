@@ -38,8 +38,8 @@ def a(data, other):
 
 def e(data, name, other):
 	# Extend
-	# BUG: name == name
-	return data.assign(name=other)
+	data[name] = other
+	return data
 
 def m(data, name, function):
 	# Map
@@ -71,11 +71,14 @@ def is_function(_f):
 
 _functions = [(_n, _t) for (_n, _t) in locals().items() if is_function(_t)]
 
-class Data(pd.DataFrame):
+class DF(pd.DataFrame):
 	pass
 
+def _set(_f):
+	return lambda self, *args, **kwargs: _f(self, *args, **kwargs)
+
 for _n, _f in _functions:
-    setattr(Data, _n, _f)
+    setattr(DF, _n, _set(_f))
 
 def read(filepath, **kwargs):
 	return pd.read_csv(filepath, **kwargs)
