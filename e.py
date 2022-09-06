@@ -1,5 +1,3 @@
-# TODO: avoid depending on DataFrames
-
 import pandas as pd
 import types
 
@@ -38,11 +36,13 @@ def a(data, other):
 
 def e(data, name, other):
 	# Extend
+	data = data.copy()
 	data[name] = other
 	return data
 
 def m(data, name, function):
 	# Map
+	data = data.copy()
 	data[name] = data.apply(function, axis='columns')
 	return data
 
