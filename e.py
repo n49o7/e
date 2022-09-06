@@ -1,6 +1,7 @@
 # TODO: avoid depending on DataFrames
 
 import pandas as pd
+import types
 
 def s(data, selection):
 	# Select
@@ -37,6 +38,7 @@ def a(data, other):
 
 def e(data, name, other):
 	# Extend
+	# BUG: name == name
 	return data.assign(name=other)
 
 def m(data, name, function):
@@ -64,13 +66,16 @@ def u(data, keep, variable, values):
 		value_name=values
 		)
 
-_fs = [(name, thing) for (name, thing) in locals().items() if callable(thing)]
+def is_function(_f):
+	return isinstance(_f, types.FunctionType)
+
+_functions = [(_n, _t) for (_n, _t) in locals().items() if is_function(_t)]
 
 class Data(pd.DataFrame):
 	pass
 
-for _n, _t in _fs:
-    setattr(Data, _n, _t)
+for _n, _f in _functions:
+    setattr(Data, _n, _f)
 
 def read(filepath, **kwargs):
 	return pd.read_csv(filepath, **kwargs)
