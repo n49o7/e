@@ -66,19 +66,23 @@ def u(data, keep, variable, values):
 		value_name=values
 		)
 
-def is_function(_f):
+def _is_function(_f):
 	return isinstance(_f, types.FunctionType)
 
-_functions = [(_n, _t) for (_n, _t) in locals().items() if is_function(_t)]
+_functions = [(_n, _t) for (_n, _t) in locals().items() if _is_function(_t)]
 
 class DF(pd.DataFrame):
 	pass
 
 def _set(_f):
-	return lambda self, *args, **kwargs: _f(self, *args, **kwargs)
+	def _inplace(data, *args, **kwargs):
+		data = _f(data, *args, **kwargs)
+		return data
+	return _inplace
 
 for _n, _f in _functions:
-    setattr(DF, _n, _set(_f))
+    setattr(DF, _n, lambda self, _function=_f: _set(_f))
+    # lambda self, val=method_value:val
 
 def read(filepath, **kwargs):
 	return pd.read_csv(filepath, **kwargs)
