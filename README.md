@@ -4,24 +4,21 @@ e is shorthand notation for pandas
 
 - The class `DF` extends pandas.DataFrame
 - Common operations are designated by single letters
-- All operations are available as methods
-- All operations are available as functions
-- Methods modify the instance in-place
-- Functions return a new instance
+- Methods overwrite the instance in-place
 
 ### Functionality
 
-|Operation|Function|
+|Operation|Method|
 |---------|--------|
-|Select|s(data, selection)|
-|Filter|f(data, condition)|
-|Join|j(data, left, right, other, operation)|
-|Append|a(data, other)|
-|Extend|e(data, name, other)|
-|Map|m(data, name, function)|
-|Reduce|r(data, function, keep)|
-|Pivot|p(data, keep, pivot, value)|
-|Unpivot|u(data, keep, variable, values)|
+|Select|s(*self*, selection)|
+|Filter|f(*self*, condition)|
+|Join|j(*self*, left, right, other, operation)|
+|Append|a(*self*, other)|
+|Extend|e(*self*, name, other)|
+|Map|m(*self*, name, function)|
+|Reduce|r(*self*, function, keep)|
+|Pivot|p(*self*, keep, pivot, value)|
+|Unpivot|u(*self*, keep, variable, values)|
 
 ### Example
 
@@ -36,7 +33,7 @@ data = e.DF({
 
 data.s(['x', 'y'])
 
-data
+print(data)
 ```
 
 ### Reference

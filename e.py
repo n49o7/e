@@ -1,88 +1,83 @@
 import pandas as pd
 import types
 
-def s(data, selection):
-	# Select
-	return data[selection]
+# Utilities
 
-def f(data, condition):
-	# Filter
-	return data[condition]
+def read(filepath, **kwargs):
+	return pd.read_csv(filepath, **kwargs)
 
-def j(data, left, right, other, operation):
-	# Join
-	o = {
-		'o': 'outer',
-		'i': 'inner',
-		'l': 'left',
-		'r': 'right',
-		'c': 'cross'
-		}
-	return pd.merge(
-		left=data,
-		right=other,
-		left_on=left,
-		right_on=right,
-		how=o[operation]
-		)
-
-def a(data, other):
-	# Append
-	return pd.concat(
-		data,
-		other,
-		ignore_index=True
-		)
-
-def e(data, name, other):
-	# Extend
-	data = data.copy()
-	data[name] = other
-	return data
-
-def m(data, name, function):
-	# Map
-	data = data.copy()
-	data[name] = data.apply(function, axis='columns')
-	return data
-
-def r(data, function, keep):
-	# Reduce
-	return data.groupby(keep).agg(function).reset_index()
-
-def p(data, keep, pivot, value):
-	# Pivot
-	return data.pivot(
-		index=keep,
-		columns=pivot,
-		values=value
-		)
-
-def u(data, keep, variable, values):
-	# Unpivot
-	return data.melt(
-		id_vars=keep,
-		var_name=variable,
-		value_name=values
-		)
-
-def _is_function(_f):
-	return isinstance(_f, types.FunctionType)
+# Class
 
 _functions = [(_n, _t) for (_n, _t) in locals().items() if _is_function(_t)]
 
 class DF(pd.DataFrame):
-	pass
 
-def _set(_f):
-	def _inplace(data, *args, **kwargs):
-		data = _f(data, *args, **kwargs)
-		return data
-	return _inplace
+	def s(self, selection):
+		# Select
+		self = DF(self[selection])
+		return self
 
-for _n, _f in _functions:
-    setattr(DF, _n, lambda self, _function=_f: _set(_f))
-    # lambda self, val=method_value:val
+	def f(self, condition):
+		# Filter
+		self = DF(self[condition])
+		return self
 
-def read(filepath, **kwargs):
-	return pd.read_csv(filepath, **kwargs)
+	def j(self, left, right, other, operation):
+		# Join
+		o = {
+			'o': 'outer',
+			'i': 'inner',
+			'l': 'left',
+			'r': 'right',
+			'c': 'cross'
+			}
+		self = DF(pd.merge(
+			left=self,
+			right=other,
+			left_on=left,
+			right_on=right,
+			how=o[operation]
+			))
+		return self
+
+	def a(self, other):
+		# Append
+		self = DF(pd.concat(
+			self,
+			other,
+			ignore_index=True
+			))
+		return self
+
+	def e(self, name, other):
+		# Extend
+		self[name] = other
+		return self
+
+	def m(self, name, function):
+		# Map
+		self[name] = self.apply(function, axis='columns')
+		return self
+
+	def r(self, function, by, selection):
+		# Reduce
+		self = DF(self.groupby(keep)[selection].agg(function).reset_index())
+		return self
+
+	def p(self, keep, pivot, value):
+		# Pivot
+		self = DF(self.pivot(
+			index=keep,
+			columns=pivot,
+			values=value
+			))
+		return self
+
+	def u(self, keep, variable, values):
+		# Unpivot
+		self = DF(self.melt(
+			id_vars=keep,
+			var_name=variable,
+			value_name=values
+			))
+		return self
