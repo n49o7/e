@@ -8,8 +8,6 @@ def read(filepath, **kwargs):
 
 # Class
 
-_functions = [(_n, _t) for (_n, _t) in locals().items() if _is_function(_t)]
-
 class DF(pd.DataFrame):
 
 	def s(self, selection):
@@ -19,6 +17,7 @@ class DF(pd.DataFrame):
 
 	def f(self, condition):
 		# Filter
+		# TODO: do not rely on the object
 		self = DF(self[condition])
 		return self
 
