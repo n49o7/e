@@ -5,20 +5,72 @@ e is shorthand notation for pandas
 - The class `DF` extends pandas.DataFrame
 - Common operations are designated by single letters
 - Methods overwrite the instance in-place
+- Indexes are not supported
 
 ### Functionality
 
-|Operation|Method|
-|---------|--------|
-|Select|s(*self*, selection)|
-|Filter|f(*self*, condition)|
-|Join|j(*self*, left, right, other, operation)|
-|Append|a(*self*, other)|
-|Extend|e(*self*, name, other)|
-|Map|m(*self*, name, function)|
-|Reduce|r(*self*, function, keep)|
-|Pivot|p(*self*, keep, pivot, value)|
-|Unpivot|u(*self*, keep, variable, values)|
+**Select**
+```{python}
+s(*self*, selection)
+selection (str or list): column name or list of column names
+```
+
+**Filter**
+```{python}
+f(*self*, condition)
+condition (list): list of booleans
+```
+**Join**
+```{python}
+j(*self*, left, right, other, operation)
+left (str): column name in the current D
+right (str): column name in the joined DF
+other (DF): joined DF
+operation (str): o, i, l, r or c
+```
+
+**Append**
+```{python}
+a(*self*, other)
+other (DF): DF containing the rows to add
+```
+
+**Extend**
+```{python}
+e(*self*, name, other)
+name (str): name of the new column
+other (list): values in the new column
+```
+
+**Map**
+```{python}
+m(*self*, name, function)
+name (str): name of the new column
+function (function(row)): function returning the values based on other columns
+```
+
+**Reduce**
+```{python}
+r(*self*, function, keep)
+function (function(row, next_row)): reducing function
+keep (str or list): columns excluded from the reduce operation
+```
+
+**Pivot**
+```{python}
+p(*self*, keep, pivot, value)
+keep (str or list): columns excluded from the pivot operation
+pivot (str): name of the column to pivot
+value (str): name of the column containing the values
+```
+
+**Unpivot**
+```{python}
+u(*self*, keep, variable, values)
+keep (str or list): columns excluded from the melt operation
+variable (str): name of the column containing the previous column names
+values (values): name of the column contaning the values
+```
 
 ### Example
 
@@ -36,5 +88,4 @@ data.s(['x', 'y'])
 print(data)
 ```
 
-### Reference
-
+See `demo.py` for more examples.
