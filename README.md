@@ -23,7 +23,7 @@ condition (list): list of booleans
 **Join**
 ```{python}
 j(*self*, left, right, other, operation)
-left (str): column name in the current D
+left (str): column name in the current DF
 right (str): column name in the joined DF
 other (DF): joined DF
 operation (str): o, i, l, r or c
